@@ -13,6 +13,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libicu-dev \
         libxslt-dev \
         wget libcurl4-openssl-dev \
+        ssh-client git \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mcrypt mysql mysqli pdo_mysql mbstring ftp soap zip opcache intl xsl \
@@ -33,9 +34,20 @@ RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
 RUN echo "extension=blackfire.so\nblackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini \
     && echo "zend_extension=`ls /usr/local/lib/php/extensions/no-debug-non-zts-*/xdebug.so`" > /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN wget http://files.magerun.net/n98-magerun.phar -O /usr/bin/n98-magerun \
-    && chmod +x /usr/bin/n98-magerun \
-    && ln -s /usr/bin/n98-magerun /usr/bin/magerun
+# Install Magerun
+RUN wget -nv http://files.magerun.net/n98-magerun.phar -O /usr/local/bin/n98-magerun \
+    && chmod +x /usr/local/bin/n98-magerun \
+    && ln -s /usr/local/bin/n98-magerun /usr/local/bin/magerun
+
+# Install Magerun2
+RUN wget -nv http://files.magerun.net/n98-magerun2.phar -O /usr/local/bin/n98-magerun2 \
+    && chmod +x /usr/local/bin/n98-magerun2 \
+    && ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
+
+# Install composer
+RUN wget -nv https://getcomposer.org/installer -O /tmp/composer-setup.php \
+    && php /tmp/composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer \
+    && rm /tmp/composer-setup.php
 
 # Copy config files
 COPY conf/php-fpm.conf /usr/local/etc/
@@ -51,4 +63,3 @@ RUN groupadd -g 1000 app && \
     useradd -g 1000 -u 1000 -d /data -s /bin/bash app
 
 WORKDIR /data
-
