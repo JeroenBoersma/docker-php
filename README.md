@@ -8,6 +8,7 @@ See https://github.com/JeroenBoersma/docker-compose-development for usage.
 
 - php5
 - php7
+- php71
 
 ## Preinstalled on both
 
@@ -28,4 +29,3 @@ Use `usermod` and `groupmod` to change the userid.
 ## License
 
 MIT
-
