@@ -13,7 +13,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libicu-dev \
         libxslt-dev \
         wget libcurl4-openssl-dev \
-        ssh-client git \
+        ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mcrypt mysql mysqli pdo_mysql mbstring ftp soap zip opcache intl xsl \
