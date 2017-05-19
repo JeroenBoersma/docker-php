@@ -16,7 +16,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install mcrypt mysql mysqli pdo_mysql mbstring ftp soap zip opcache intl xsl \
+RUN docker-php-ext-install mcrypt bcmath mysql mysqli pdo_mysql mbstring ftp soap zip opcache intl xsl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
