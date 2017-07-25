@@ -21,7 +21,7 @@ RUN docker-php-ext-install mcrypt bcmath mysqli pdo_mysql mbstring ftp soap zip 
     && docker-php-ext-install gd
 
 # Install xdebug
-RUN wget -nv https://xdebug.org/files/xdebug-2.5.3.tgz \
+RUN wget -nv https://xdebug.org/files/xdebug-2.5.5.tgz \
     && tar -xvzf xdebug-*.tgz \
     && cd xdebug-* \
     && phpize \
