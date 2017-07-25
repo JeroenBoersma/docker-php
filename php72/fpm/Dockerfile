@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.2-rc-fpm
 MAINTAINER Jeroen Boersma <jeroen@srcode.nl>
 
 RUN apt-get update --fix-missing && apt-get install -y \
