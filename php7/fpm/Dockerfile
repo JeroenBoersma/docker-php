@@ -41,12 +41,12 @@ RUN echo "extension=blackfire.so\nblackfire.agent_socket=\${BLACKFIRE_PORT}" > $
     && echo "zend_extension=xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
 
 # Install Magerun
-RUN wget -nv http://files.magerun.net/n98-magerun.phar -O /usr/local/bin/n98-magerun \
+RUN wget -nv https://files.magerun.net/n98-magerun-1.97.30.phar -O /usr/local/bin/n98-magerun \
     && chmod +x /usr/local/bin/n98-magerun \
     && ln -s /usr/local/bin/n98-magerun /usr/local/bin/magerun
 
 # Install Magerun2
-RUN wget -nv http://files.magerun.net/n98-magerun2.phar -O /usr/local/bin/n98-magerun2 \
+RUN wget -nv https://files.magerun.net/n98-magerun2.phar -O /usr/local/bin/n98-magerun2 \
     && chmod +x /usr/local/bin/n98-magerun2 \
     && ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
 
