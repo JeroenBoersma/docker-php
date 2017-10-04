@@ -12,6 +12,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libxml2-dev \
         libicu-dev \
         libxslt-dev \
+        php5-xdebug \
         wget libcurl4-openssl-dev \
         ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
@@ -23,7 +24,7 @@ RUN docker-php-ext-install mcrypt bcmath mysql mysqli pdo_mysql mbstring ftp soa
 # Install xdebug
 # workaround for https://github.com/docker-library/php/issues/133
 #     - Xdebug breaks on access to class static property
-apt-get install -y php5-xdebug
+# Added to apt above
 
 # Install blackfire agent
 RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
