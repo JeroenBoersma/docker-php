@@ -1,11 +1,11 @@
-FROM php:7.2-rc-fpm
+FROM php:7.2-fpm
 MAINTAINER Jeroen Boersma <jeroen@srcode.nl>
 
 RUN apt-get update --fix-missing && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
-        libpng12-dev \
+        libpng-dev \
         msmtp \
         imagemagick \
         libssl-dev \
@@ -16,12 +16,13 @@ RUN apt-get update --fix-missing && apt-get install -y \
         ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install mcrypt bcmath mysqli pdo_mysql mbstring ftp soap zip intl opcache xsl \
+RUN pecl install mcrypt-1.0.1 && docker-php-ext-enable mcrypt \
+    && docker-php-ext-install bcmath mysqli pdo_mysql mbstring ftp soap zip intl opcache xsl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
 # Install xdebug
-RUN wget -nv https://xdebug.org/files/xdebug-2.5.5.tgz \
+RUN wget -nv https://xdebug.org/files/xdebug-2.6.0.tgz \
     && tar -xvzf xdebug-*.tgz \
     && cd xdebug-* \
     && phpize \
