@@ -9,6 +9,7 @@ See https://github.com/JeroenBoersma/docker-compose-development for usage.
 - php5
 - php7
 - php71
+- php72
 
 ## Preinstalled on both
 
@@ -25,6 +26,8 @@ Use `usermod` and `groupmod` to change the userid.
 ## Authors
 
 - [Jeroen Boersma](https://github.com/JeroenBoersma)
+- [Len Lorijn](https://github.com/lenlorijn)
+- [Sander Jongsma](https://github.com/sanderjongsma)
 
 ## License
 
