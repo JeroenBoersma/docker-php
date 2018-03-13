@@ -20,6 +20,16 @@ RUN docker-php-ext-install mcrypt bcmath mysqli pdo_mysql mbstring ftp soap zip 
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
+ENV PHPREDIS_VERSION 3.0.0
+
+RUN docker-php-source extract \
+    && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
+    && tar xfz /tmp/redis.tar.gz \
+    && rm -r /tmp/redis.tar.gz \
+    && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
+    && docker-php-ext-install redis \
+    && docker-php-source delete
+
 # Install xdebug
 RUN wget -nv https://xdebug.org/files/xdebug-2.5.5.tgz \
     && tar -xvzf xdebug-*.tgz \
