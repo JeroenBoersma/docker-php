@@ -12,7 +12,6 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libxml2-dev \
         libicu-dev \
         libxslt-dev \
-        php5-xdebug \
         wget libcurl4-openssl-dev \
         ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
@@ -32,9 +31,8 @@ RUN docker-php-source extract \
     && docker-php-source delete
 
 # Install xdebug
-# workaround for https://github.com/docker-library/php/issues/133
-#     - Xdebug breaks on access to class static property
-# Added to apt above
+RUN pecl install xdebug-2.5.5 \
+    && rm -rf /tmp/pear 
 
 # Install blackfire agent
 RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
@@ -44,8 +42,7 @@ RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
 
 # Enable debug extension
 RUN echo "extension=blackfire.so\nblackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini \
-    && echo "zend_extension=/usr/lib/php5/20131226/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
-
+    && echo "zend_extension=`ls /usr/local/lib/php/extensions/no-debug-non-zts-*/xdebug.so`" > /usr/local/etc/php/conf.d/xdebug.ini
 
 # Install Magerun
 RUN wget -nv https://files.magerun.net/n98-magerun-1.97.30.phar -O /usr/local/bin/n98-magerun \
