@@ -5,7 +5,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
-        libpng12-dev \
+        libpng-dev \
         msmtp \
         imagemagick \
         libssl-dev \
@@ -13,22 +13,15 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libicu-dev \
         libxslt-dev \
         wget libcurl4-openssl-dev \
+        libmagickwand-dev imagemagick \
         ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mcrypt bcmath mysqli pdo_mysql mbstring ftp soap zip intl opcache xsl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install gd
-
-ENV PHPREDIS_VERSION 3.0.0
-
-RUN docker-php-source extract \
-    && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
-    && tar xfz /tmp/redis.tar.gz \
-    && rm -r /tmp/redis.tar.gz \
-    && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
-    && docker-php-ext-install redis \
-    && docker-php-source delete
+    && docker-php-ext-install gd \
+    && pecl install imagick-3.4.3 \
+    && docker-php-ext-enable imagick
 
 # Install xdebug
 RUN wget -nv https://xdebug.org/files/xdebug-2.5.5.tgz \
@@ -44,7 +37,8 @@ RUN wget -nv https://xdebug.org/files/xdebug-2.5.5.tgz \
 RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
-    && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so
+    && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
+    && rm /tmp/blackfire*
 
 # Enable debug extension
 RUN echo "extension=blackfire.so\nblackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini \
