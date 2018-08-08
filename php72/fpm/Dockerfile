@@ -23,15 +23,10 @@ RUN docker-php-ext-install bcmath mysqli pdo_mysql mbstring ftp soap zip intl op
     && pecl install imagick-3.4.3 \
     && docker-php-ext-enable imagick
 
-# Install xdebug
-RUN wget -nv https://xdebug.org/files/xdebug-2.6.0.tgz \
-    && tar -xvzf xdebug-*.tgz \
-    && cd xdebug-* \
-    && phpize \
-    && ./configure \
-    && make \
-    && cp modules/xdebug.so `php -r "echo ini_get('extension_dir');"`/xdebug.so \
-    && cd && rm -rf xdebug-2.*
+# Install xdebug and redis
+RUN pecl install xdebug-2.6.1 redis-4.1.1 \
+    && docker-php-ext-enable xdebug redis \
+    && rm -rf /tmp/pear
 
 # Install blackfire agent
 RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
