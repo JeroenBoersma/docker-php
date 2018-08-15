@@ -14,6 +14,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libxslt-dev \
         libmagickwand-dev imagemagick \
         wget libcurl4-openssl-dev \
+        unzip \
         ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
 
