@@ -1,5 +1,5 @@
 FROM php:7.3-rc-fpm
-MAINTAINER Jeroen Boersma <jeroen@srcode.nl>
+LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 RUN apt-get update --fix-missing && apt-get install -y \
         libfreetype6-dev \
