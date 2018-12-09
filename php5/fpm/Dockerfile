@@ -22,7 +22,7 @@ RUN docker-php-ext-install mcrypt bcmath mysql mysqli pdo_mysql mbstring ftp soa
     && docker-php-ext-install gd
 
 # Install xdebug and redis
-RUN pecl install xdebug-2.5.5 redis-4.1.1 \
+RUN pecl install xdebug-2.5.5 redis-4.2.0 \
     && docker-php-ext-enable xdebug redis \
     && rm -rf /tmp/pear 
 

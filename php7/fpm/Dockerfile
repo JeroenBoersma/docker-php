@@ -25,7 +25,7 @@ RUN docker-php-ext-install mcrypt bcmath mysqli pdo_mysql mbstring ftp soap zip 
     && docker-php-ext-enable imagick
 
 # Install xdebug and redis
-RUN pecl install xdebug-2.6.1 redis-4.1.1 \
+RUN pecl install xdebug-2.6.1 redis-4.2.0 \
     && docker-php-ext-enable xdebug redis \
     && rm -rf /tmp/pear
 
