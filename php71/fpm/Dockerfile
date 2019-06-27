@@ -35,8 +35,8 @@ RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl \
     && docker-php-ext-install gd
 
 # Install xdebug and redis
-RUN pecl install imagick xdebug redis libsodium \
-    && docker-php-ext-enable imagick xdebug redis sodium \
+RUN pecl install imagick xdebug redis libsodium apcu \
+    && docker-php-ext-enable imagick xdebug redis sodium apcu \
     && rm -rf /tmp/pear
 
 # Install blackfire agent

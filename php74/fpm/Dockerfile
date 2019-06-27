@@ -35,20 +35,20 @@ RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl \
     && docker-php-ext-install gd
 
 # Install xdebug and redis
-RUN pecl install imagick xdebug redis libsodium \
-    && docker-php-ext-enable imagick xdebug redis sodium \
-    && rm -rf /tmp/pear
+#RUN pecl install imagick xdebug redis apcu \
+#    && docker-php-ext-enable imagick xdebug redis sodium apcu \
+#    && rm -rf /tmp/pear
 
 # Install blackfire agent
-RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
-    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
-    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
-    && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
-    && docker-php-ext-enable blackfire \
-    && rm /tmp/blackfire*
+#RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
+#    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
+#    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
+#    && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
+#    && docker-php-ext-enable blackfire \
+#    && rm /tmp/blackfire*
 
 # Enable debug extension
-RUN echo "blackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini
+#RUN echo "blackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini
 
 # Install Magerun
 RUN wget -nv https://files.magerun.net/n98-magerun.phar -O /usr/local/bin/n98-magerun \
