@@ -21,13 +21,11 @@ RUN apt-get update --fix-missing && apt-get install -y \
 
 RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install gd \
-    && pecl install imagick-3.4.3 \
-    && docker-php-ext-enable imagick
+    && docker-php-ext-install gd
 
 # Install xdebug and redis
-RUN pecl install xdebug redis \
-    && docker-php-ext-enable xdebug redis \
+RUN pecl install imagick xdebug redis \
+    && docker-php-ext-enable imagick xdebug redis \
     && rm -rf /tmp/pear
 
 # Install blackfire agent
@@ -70,3 +68,4 @@ RUN groupadd -g 1000 app && \
     useradd -g 1000 -u 1000 -d /data -s /bin/bash app
 
 WORKDIR /data
+
