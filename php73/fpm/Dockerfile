@@ -26,7 +26,7 @@ RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl \
     && docker-php-ext-enable imagick
 
 # Install xdebug and redis
-RUN pecl install xdebug-2.7.0beta1 redis-4.2.0 \
+RUN pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \
     && rm -rf /tmp/pear
 
