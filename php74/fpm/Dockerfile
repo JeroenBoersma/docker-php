@@ -1,4 +1,4 @@
-FROM php:7.4-rc-fpm
+FROM php:7.4-fpm
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 RUN apt-get update --fix-missing && apt-get install -y \
@@ -19,13 +19,24 @@ RUN apt-get update --fix-missing && apt-get install -y \
         ssh-client git vim \
     && rm -rf /var/lib/apt/lists/*
 
+# Install libsodium
+RUN mkdir -p /tmp/sodium \
+    && cd /tmp/sodium \
+    && curl -L 'https://download.libsodium.org/libsodium/releases/LATEST.tar.gz' -o latest.tar.gz \
+    && tar xzvf latest.tar.gz \
+    && cd libsodium-*/ \
+    && ./configure \
+    && make && make check \
+    && make install \
+    && rm -rf /tmp/sodium
+
 RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
 # Install xdebug and redis
-RUN pecl install imagick xdebug redis \
-    && docker-php-ext-enable imagick xdebug redis \
+RUN pecl install imagick xdebug redis libsodium \
+    && docker-php-ext-enable imagick xdebug redis sodium \
     && rm -rf /tmp/pear
 
 # Install blackfire agent
