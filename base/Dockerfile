@@ -1,4 +1,4 @@
-FROM php:{PHP_VERSION}
+FROM php:%%PHP_VERSION%%
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 RUN apt-get update --fix-missing && apt-get install -y \
