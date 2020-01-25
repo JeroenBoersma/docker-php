@@ -1,4 +1,4 @@
-FROM php:7.4-rc-fpm
+FROM php:7.4-fpm
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 RUN apt-get update --fix-missing && apt-get install -y \
@@ -30,25 +30,25 @@ RUN mkdir -p /tmp/sodium \
     && make install \
     && rm -rf /tmp/sodium
 
-RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl \
+    && docker-php-ext-configure gd \
     && docker-php-ext-install gd
 
 # Install xdebug and redis
-#RUN pecl install imagick xdebug redis apcu \
-#    && docker-php-ext-enable imagick xdebug redis sodium apcu \
-#    && rm -rf /tmp/pear
+RUN pecl install imagick xdebug redis libsodium apcu \
+    && docker-php-ext-enable imagick xdebug redis sodium apcu \
+    && rm -rf /tmp/pear
 
 # Install blackfire agent
-#RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
-#    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
-#    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
-#    && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
-#    && docker-php-ext-enable blackfire \
-#    && rm /tmp/blackfire*
+RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
+    && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
+    && docker-php-ext-enable blackfire \
+    && rm /tmp/blackfire*
 
 # Enable debug extension
-#RUN echo "blackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini
+RUN echo "blackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini
 
 # Install Magerun
 RUN wget -nv https://files.magerun.net/n98-magerun.phar -O /usr/local/bin/n98-magerun \

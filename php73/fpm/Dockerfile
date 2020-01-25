@@ -30,7 +30,7 @@ RUN mkdir -p /tmp/sodium \
     && make install \
     && rm -rf /tmp/sodium
 
-RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl \
+RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
