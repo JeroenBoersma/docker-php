@@ -18,6 +18,8 @@ See https://github.com/JeroenBoersma/docker-compose-development for usage.
 - Imagemagick
 - Xdebug
 - Blackfire
+- Magerun
+- Magerun 2
 
 ## User
 
@@ -30,6 +32,7 @@ Use `usermod` and `groupmod` to change the userid.
 - [Jeroen Boersma](https://github.com/JeroenBoersma)
 - [Len Lorijn](https://github.com/lenlorijn)
 - [Sander Jongsma](https://github.com/sanderjongsma)
+- [Peter Jaap](https://github.com/peterjaap)
 
 ## License
 
