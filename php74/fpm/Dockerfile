@@ -6,6 +6,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng-dev \
+        libwebp-dev \
         msmtp \
         imagemagick \
         libssl-dev \
@@ -31,7 +32,7 @@ RUN mkdir -p /tmp/sodium \
     && rm -rf /tmp/sodium
 
 RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd
 
 # Install xdebug and redis
