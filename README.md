@@ -6,10 +6,12 @@ See https://github.com/JeroenBoersma/docker-compose-development for usage.
 
 ## Versions
 
-- php5
-- php7
-- php71
+- php5 (EOL, last updated june 2019)
+- php7 (EOL, last updated jan 2020)
+- php71 (EOL, last updated feb 2020)
 - php72
+- php73
+- php74
 
 ## Preinstalled on both
 
