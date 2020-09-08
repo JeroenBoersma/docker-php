@@ -61,9 +61,11 @@ RUN wget -nv https://files.magerun.net/n98-magerun2.phar -O /usr/local/bin/n98-m
     && ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
 
 # Install composer
-RUN wget -nv https://getcomposer.org/installer -O /tmp/composer-setup.php \
-    && php /tmp/composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer \
-    && rm /tmp/composer-setup.php
+RUN wget -nv https://getcomposer.org/composer-1.phar -O /usr/local/bin/composer1 \
+    && chmod ugo+rx /usr/local/bin/composer1 \
+    && ln -s /usr/local/bin/composer1 /usr/local/bin/composer
+RUN wget -nv https://getcomposer.org/composer-2.phar -O /usr/local/bin/composer2 \
+    && chmod ugo+rx /usr/local/bin/composer2
 
 # Copy config files
 COPY conf/php-fpm.conf /usr/local/etc/
