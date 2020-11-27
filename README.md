@@ -12,8 +12,9 @@ See https://github.com/JeroenBoersma/docker-compose-development for usage.
 - php72
 - php73
 - php74
+- php80
 
-## Preinstalled on both
+## Preinstalled
 
 - Imagemagick
 - Xdebug
