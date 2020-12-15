@@ -1,4 +1,4 @@
-FROM php:8.0-rc-fpm
+FROM php:8.0-fpm
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 RUN apt-get update --fix-missing && apt-get install -y \
