@@ -35,6 +35,11 @@ RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcn
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd
 
+# Install xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && rm -rf /tmp/pear
+
 # Install xdebug and redis
 #RUN pecl install imagick xdebug redis libsodium apcu \
 #    && docker-php-ext-enable imagick xdebug redis sodium apcu \
