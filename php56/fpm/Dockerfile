@@ -24,7 +24,7 @@ RUN docker-php-ext-install mcrypt bcmath mysql mysqli pdo_mysql mbstring ftp soa
 # Install xdebug and redis
 RUN pecl install xdebug-2.5.5 redis-4.2.0 \
     && docker-php-ext-enable xdebug redis \
-    && rm -rf /tmp/pear 
+    && rm -rf /tmp/pear
 
 # Install blackfire agent
 RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
@@ -47,9 +47,9 @@ RUN wget -nv https://files.magerun.net/n98-magerun2.phar -O /usr/local/bin/n98-m
     && ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
 
 # Install composer
-RUN wget -nv https://getcomposer.org/installer -O /tmp/composer-setup.php \
-    && php /tmp/composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer \
-    && rm /tmp/composer-setup.php
+RUN curl -sS https://getcomposer.org/installer \
+        | php -- --1 --install-dir=/usr/local/bin --filename=composer \
+    chmod ugo+rx /usr/local/bin/composer
 
 # Copy config files
 COPY conf/php-fpm.conf /usr/local/etc/
