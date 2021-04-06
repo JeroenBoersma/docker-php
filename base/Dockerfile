@@ -31,13 +31,24 @@ RUN mkdir -p /tmp/sodium \
     && make install \
     && rm -rf /tmp/sodium
 
+# Install imagick
+RUN cd /tmp \
+    && git clone https://github.com/Imagick/imagick \
+    && cd imagick \
+    && phpize \
+    && ./configure \
+    && make \
+    && make install \
+    && docker-php-ext-enable imagick \
+    && rm -rf /tmp/imagick
+
 RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd
 
-# Install xdebug and redis
-RUN pecl install imagick xdebug redis libsodium apcu \
-    && docker-php-ext-enable imagick xdebug redis sodium apcu \
+# Install PECL extensions
+RUN pecl install xdebug redis apcu \
+    && docker-php-ext-enable xdebug redis apcu \
     && rm -rf /tmp/pear
 
 # Install blackfire agent
@@ -62,11 +73,13 @@ RUN wget -nv https://files.magerun.net/n98-magerun2.phar -O /usr/local/bin/n98-m
     && ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
 
 # Install composer
-RUN wget -nv https://getcomposer.org/composer-1.phar -O /usr/local/bin/composer1 \
-    && chmod ugo+rx /usr/local/bin/composer1 \
-    && ln -s /usr/local/bin/composer1 /usr/local/bin/composer
-RUN wget -nv https://getcomposer.org/composer-2.phar -O /usr/local/bin/composer2 \
-    && chmod ugo+rx /usr/local/bin/composer2
+RUN curl -sS https://getcomposer.org/installer --output composer-setup.php \
+    && for version in 1 2; \
+        do php composer-setup.php "--$version" --install-dir=/usr/local/bin --filename="composer$version"; \
+        chmod ugo+rx /usr/local/bin/"composer$version"; \
+    done \
+    && ln -s /usr/local/bin/composer1 /usr/local/bin/composer \
+    && rm composer-setup.php
 
 # Copy config files
 COPY conf/php-fpm.conf /usr/local/etc/
@@ -82,4 +95,3 @@ RUN groupadd -g 1000 app && \
     useradd -g 1000 -u 1000 -d /data -s /bin/bash app
 
 WORKDIR /data
-
