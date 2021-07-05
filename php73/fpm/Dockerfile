@@ -48,7 +48,7 @@ RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
     && rm /tmp/blackfire*
 
 # Enable debug extension
-RUN echo "blackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini
+RUN echo "blackfire.agent_socket=tcp://blackfire:8307 > $PHP_INI_DIR/conf.d/blackfire.ini
 
 # Install Magerun
 RUN wget -nv https://files.magerun.net/n98-magerun.phar -O /usr/local/bin/n98-magerun \
