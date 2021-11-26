@@ -43,7 +43,7 @@ RUN cd /tmp \
     && rm -rf /tmp/imagick
 
 RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
 # Install PECL extensions

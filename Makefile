@@ -44,6 +44,9 @@ php%/fpm/Dockerfile: base/Dockerfile
 	cp base/Dockerfile $@
 	sed -e 's/%%PHP_VERSION%%/$(version)/' -i $@
 
+php72/fpm/Dockerfile php73/fpm/Dockerfile:
+	sed -e 's# --with-freetype --with-jpeg --with-webp# --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/#' -i $@
+
 php%/fpm/conf/php.ini: base/conf/php.ini
 	@mkdir -p $(shell dirname $@)
 	cp base/conf/php.ini $@
