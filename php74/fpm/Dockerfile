@@ -31,22 +31,33 @@ RUN mkdir -p /tmp/sodium \
     && make install \
     && rm -rf /tmp/sodium
 
-RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets \
+# Install imagick
+RUN cd /tmp \
+    && git clone https://github.com/Imagick/imagick \
+    && cd imagick \
+    && phpize \
+    && ./configure \
+    && make \
+    && make install \
+    && docker-php-ext-enable imagick \
+    && rm -rf /tmp/imagick
+
+RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd
 
-# Install xdebug and redis
-RUN pecl install imagick xdebug redis libsodium apcu \
-    && docker-php-ext-enable imagick xdebug redis sodium apcu \
+# Install PECL extensions
+RUN pecl install xdebug redis apcu \
+    && docker-php-ext-enable xdebug redis apcu \
     && rm -rf /tmp/pear
 
 # Install blackfire agent
 RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
-    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
+    && (curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
     && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
     && docker-php-ext-enable blackfire \
-    && rm /tmp/blackfire*
+    && rm /tmp/blackfire* || true)
 
 # Enable debug extension
 RUN echo "blackfire.agent_socket=tcp://blackfire:8307" > $PHP_INI_DIR/conf.d/blackfire.ini
@@ -84,4 +95,3 @@ RUN groupadd -g 1000 app && \
     useradd -g 1000 -u 1000 -d /data -s /bin/bash app
 
 WORKDIR /data
-
