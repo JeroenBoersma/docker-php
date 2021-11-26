@@ -21,15 +21,15 @@ clean:
 .PHONY: build
 build: all
 	for version in $(versions); do \
-		$(MAKE) "build-version-$${version}" version="$${version}"; \
+		$(MAKE) build-version version="$${version}"; \
 	done
 
 .PHONY: images
 images:
 	docker images | grep $(dockerimage)
 
-.PHONY: build-version-%
-build-version-%:
+.PHONY: build-version
+build-version:
 ifeq ($(strip $(version)),)
 	$(error Provide version variable)
 endif
