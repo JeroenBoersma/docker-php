@@ -1,9 +1,13 @@
 versions = php72 php73 php74 php80 php81
+directories = $(foreach version,$(versions),$(version)/fpm)
 
-dockerfiles = $(foreach version,$(versions),$(version)/fpm/Dockerfile)
+dockerimage = srcoder/development-php
+version = 
+dockertag = $(version)-fpm
 
-phpfpmfiles = $(foreach version,$(versions),$(version)/fpm/conf/php-fpm.conf)
-phpinifiles = $(foreach version,$(versions),$(version)/fpm/conf/php.ini)
+dockerfiles = $(foreach directory,$(directories),$(directory)/Dockerfile)
+phpfpmfiles = $(foreach directory,$(directories),$(directory)/conf/php-fpm.conf)
+phpinifiles = $(foreach directory,$(directories),$(directory)/conf/php.ini)
 
 allfiles = $(dockerfiles) $(phpfpmfiles) $(phpinifiles)
 
@@ -14,21 +18,37 @@ all: $(allfiles)
 clean:
 	rm $(allfiles)
 
-php%: version = $(shell echo $@ | sed -e 's#/.*##'))
+.PHONY: build
+build: all
+	for version in $(versions); do \
+		$(MAKE) "build-version-$${version}" version="$${version}"; \
+	done
 
-php%/fpm/.:
-	mkdir $@
+.PHONY: images
+images:
+	docker images | grep $(dockerimage)
 
-php%/fpm/Dockerfile: php%/fpm base/Dockerfile
+.PHONY: build-version-%
+build-version-%:
+ifeq ($(strip $(version)),)
+	$(error Provide version variable)
+endif
+	cd $(version)/fpm \
+		&& docker build --tag "$(dockerimage):$(dockertag)" .
+
+php%: version = $(shell echo $@ | sed -e 's#/.*##' -e 's/php\([0-9]\)\([0-9]\)/\1.\2-fpm/')
+php81/fpm/Dockerfile: version = 8.1-rc-fpm
+
+php%/fpm/Dockerfile: base/Dockerfile
+	@mkdir -p $(shell dirname $@)
 	cp base/Dockerfile $@
-	sed -e 's/%%PHP_VERSION%%/$(version)/' -e 's/php:php\([0-9]\)\([0-9]\)$$/php:\1.\2-fpm/' -i $@
+	sed -e 's/%%PHP_VERSION%%/$(version)/' -i $@
 
-php%/fpm/conf/.: php%/fpm
-	mkdir $@
-
-php%/fpm/conf/php.ini: php%/fpm/conf base/conf/php.ini
+php%/fpm/conf/php.ini: base/conf/php.ini
+	@mkdir -p $(shell dirname $@)
 	cp base/conf/php.ini $@
 
-php%/fpm/conf/php-fpm.conf: php%/fpm/conf base/conf/php-fpm.conf
+php%/fpm/conf/php-fpm.conf: base/conf/php-fpm.conf
+	@mkdir -p $(shell dirname $@)
 	cp base/conf/php-fpm.conf $@
 
