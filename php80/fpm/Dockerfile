@@ -78,7 +78,7 @@ RUN curl -sS https://getcomposer.org/installer --output composer-setup.php \
         do php composer-setup.php "--$version" --install-dir=/usr/local/bin --filename="composer$version"; \
         chmod ugo+rx /usr/local/bin/"composer$version"; \
     done \
-    && ln -s /usr/local/bin/composer1 /usr/local/bin/composer \
+    && ln -s /usr/local/bin/composer2 /usr/local/bin/composer \
     && rm composer-setup.php
 
 # Copy config files
