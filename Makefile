@@ -12,7 +12,7 @@ phpinifiles = $(foreach directory,$(directories),$(directory)/conf/php.ini)
 allfiles = $(dockerfiles) $(phpfpmfiles) $(phpinifiles)
 
 # PHP MODULES and CONFIGURATIONS PARAMETERS
-PECL_EXTENSIONS = xdebug redis acpu
+PECL_EXTENSIONS = xdebug redis apcu
 DOCKER_EXT_INSTALL = bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif
 DOCKER_EXT_CONFIGURE = gd --with-freetype --with-jpeg --with-webp
 DOCKER_EXT_CONFIGURE_INSTALL = gd
