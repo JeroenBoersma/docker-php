@@ -42,13 +42,13 @@ RUN cd /tmp \
     && docker-php-ext-enable imagick \
     && rm -rf /tmp/imagick
 
-RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install gd
+RUN docker-php-ext-install %%DOCKER_EXT_INSTALL%% \
+    && docker-php-ext-configure %%DOCKER_EXT_CONFIGURE%% \
+    && docker-php-ext-install %%DOCKER_EXT_CONFIGURE_INSTALL%%
 
 # Install PECL extensions
-RUN pecl install xdebug redis apcu \
-    && docker-php-ext-enable xdebug redis apcu \
+RUN pecl install %%PECL_EXTENSIONS%% \
+    && docker-php-ext-enable %%PECL_EXTENSIONS%% \
     && rm -rf /tmp/pear
 
 # Install blackfire agent
@@ -78,7 +78,7 @@ RUN curl -sS https://getcomposer.org/installer --output composer-setup.php \
         do php composer-setup.php "--$version" --install-dir=/usr/local/bin --filename="composer$version"; \
         chmod ugo+rx /usr/local/bin/"composer$version"; \
     done \
-    && ln -s /usr/local/bin/composer1 /usr/local/bin/composer \
+    && ln -s /usr/local/bin/composer2 /usr/local/bin/composer \
     && rm composer-setup.php
 
 # Copy config files

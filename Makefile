@@ -11,6 +11,12 @@ phpinifiles = $(foreach directory,$(directories),$(directory)/conf/php.ini)
 
 allfiles = $(dockerfiles) $(phpfpmfiles) $(phpinifiles)
 
+# PHP MODULES and CONFIGURATIONS PARAMETERS
+PECL_EXTENSIONS = xdebug redis acpu
+DOCKER_EXT_INSTALL = bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif
+DOCKER_EXT_CONFIGURE = gd --with-freetype --with-jpeg --with-webp
+DOCKER_EXT_CONFIGURE_INSTALL = gd
+
 all: $(allfiles)
 	@echo Created all files
 
@@ -43,6 +49,10 @@ php%/fpm/Dockerfile: base/Dockerfile
 	@mkdir -p $(shell dirname $@)
 	cp base/Dockerfile $@
 	sed -e 's/%%PHP_VERSION%%/$(version)/' -i $@
+	sed -e 's/%%PECL_EXTENSIONS%%/$(PECL_EXTENSIONS)/' -i $@
+	sed -e 's/%%DOCKER_EXT_INSTALL%%/$(DOCKER_EXT_INSTALL)/' -i $@
+	sed -e 's/%%DOCKER_EXT_CONFIGURE%%/$(DOCKER_EXT_CONFIGURE)/' -i $@
+	sed -e 's/%%DOCKER_EXT_CONFIGURE_INSTALL%%/$(DOCKER_EXT_CONFIGURE_INSTALL)/' -i $@
 
 php72/fpm/Dockerfile php73/fpm/Dockerfile:
 	sed -e 's# --with-freetype --with-jpeg --with-webp# --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/#' -i $@
