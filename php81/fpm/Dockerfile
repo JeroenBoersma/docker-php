@@ -47,8 +47,8 @@ RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcn
     && docker-php-ext-install gd
 
 # Install PECL extensions
-RUN pecl install xdebug redis acpu \
-    && docker-php-ext-enable xdebug redis acpu \
+RUN pecl install xdebug redis apcu \
+    && docker-php-ext-enable xdebug redis apcu \
     && rm -rf /tmp/pear
 
 # Install blackfire agent
