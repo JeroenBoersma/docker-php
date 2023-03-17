@@ -1,4 +1,4 @@
-FROM php:8.2-rc-fpm
+FROM php:8.2-fpm
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 RUN apt-get update --fix-missing && apt-get install -y \
@@ -47,8 +47,8 @@ RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcn
     && docker-php-ext-install gd
 
 # Install PECL extensions
-RUN pecl install redis apcu \
-    && docker-php-ext-enable redis apcu \
+RUN pecl install xdebug redis apcu \
+    && docker-php-ext-enable xdebug redis apcu \
     && rm -rf /tmp/pear
 
 # Install blackfire agent
