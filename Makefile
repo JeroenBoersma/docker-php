@@ -43,7 +43,7 @@ endif
 		&& docker build --tag "$(dockerimage):$(dockertag)" .
 
 php%: version = $(shell echo $@ | sed -e 's#/.*##' -e 's/php\([0-9]\)\([0-9]\)/\1.\2-fpm/')
-php82/fpm/Dockerfile: version = 8.2-rc-fpm
+#php82/fpm/Dockerfile: version = 8.2-rc-fpm
 
 php%/fpm/Dockerfile: base/Dockerfile
 	@mkdir -p $(shell dirname $@)
