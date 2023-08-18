@@ -1,4 +1,4 @@
-versions = php80 php81 php82
+versions = php80 php81 php83 php83
 directories = $(foreach version,$(versions),$(version)/fpm)
 
 dockerimage = srcoder/development-php
@@ -43,7 +43,7 @@ endif
 		&& docker build --tag "$(dockerimage):$(dockertag)" .
 
 php%: version = $(shell echo $@ | sed -e 's#/.*##' -e 's/php\([0-9]\)\([0-9]\)/\1.\2-fpm/')
-#php82/fpm/Dockerfile: version = 8.2-rc-fpm
+php83/fpm/Dockerfile: version = 8.3.0beta2-fpm
 
 php%/fpm/Dockerfile: base/Dockerfile
 	@mkdir -p $(shell dirname $@)

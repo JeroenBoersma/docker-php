@@ -9,10 +9,13 @@ See https://github.com/JeroenBoersma/docker-compose-development for usage.
 - php5 (EOL, last updated june 2019)
 - php7 (EOL, last updated jan 2020)
 - php71 (EOL, last updated feb 2020)
-- php72
-- php73
-- php74
+- php72 (EOL, last updated nov 2022)
+- php73 (EOL, last updated nov 2022)
+- php74 (EOL, last updated nov 2022)
 - php80
+- php81
+- php82
+- php83 (beta2)
 
 ## Preinstalled
 
