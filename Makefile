@@ -17,6 +17,8 @@ DOCKER_EXT_INSTALL = bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl soc
 DOCKER_EXT_CONFIGURE = gd --with-freetype --with-jpeg --with-webp
 DOCKER_EXT_CONFIGURE_INSTALL = gd
 
+DOCKER_CMD=docker
+
 all: $(allfiles)
 	@echo Created all files
 
@@ -32,7 +34,7 @@ build: all
 
 .PHONY: images
 images:
-	docker images | grep $(dockerimage)
+	$(DOCKER_CMD) images | grep $(dockerimage)
 
 .PHONY: build-version
 build-version:
@@ -40,10 +42,9 @@ ifeq ($(strip $(version)),)
 	$(error Provide version variable)
 endif
 	cd $(version)/fpm \
-		&& docker build --tag "$(dockerimage):$(dockertag)" .
+		&& $(DOCKER_CMD) build --tag "$(dockerimage):$(dockertag)" .
 
 php%: version = $(shell echo $@ | sed -e 's#/.*##' -e 's/php\([0-9]\)\([0-9]\)/\1.\2-fpm/')
-php83/fpm/Dockerfile: version = 8.3.0beta2-fpm
 
 php%/fpm/Dockerfile: base/Dockerfile
 	@mkdir -p $(shell dirname $@)
