@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM docker.io/library/php:8.3-fpm
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 RUN apt-get update --fix-missing && apt-get install -y \
@@ -82,13 +82,11 @@ RUN curl -sS https://getcomposer.org/installer --output composer-setup.php \
     && rm composer-setup.php
 
 # Copy config files
-COPY conf/php-fpm.conf /usr/local/etc/
+COPY conf/zz-srcoder.conf /usr/local/etc/php-fpm.d/zz-srcoder.conf
 COPY conf/php.ini /usr/local/etc/php/
 
 # Enable PHP cli
 RUN chmod ugo+rX -R /usr/local/etc/php
-
-ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=app --with-fpm-group=app
 
 # Add user and group
 RUN groupadd -g 1000 app && \
