@@ -6,7 +6,7 @@ version =
 dockertag = $(version)-fpm
 
 dockerfiles = $(foreach directory,$(directories),$(directory)/Dockerfile)
-phpfpmfiles = $(foreach directory,$(directories),$(directory)/conf/php-fpm.conf)
+phpfpmfiles = $(foreach directory,$(directories),$(directory)/conf/zz-srcoder.conf)
 phpinifiles = $(foreach directory,$(directories),$(directory)/conf/php.ini)
 
 allfiles = $(dockerfiles) $(phpfpmfiles) $(phpinifiles)
@@ -62,7 +62,7 @@ php%/fpm/conf/php.ini: base/conf/php.ini
 	@mkdir -p $(shell dirname $@)
 	cp base/conf/php.ini $@
 
-php%/fpm/conf/php-fpm.conf: base/conf/php-fpm.conf
+php%/fpm/conf/zz-srcoder.conf: base/conf/zz-srcoder.conf
 	@mkdir -p $(shell dirname $@)
-	cp base/conf/php-fpm.conf $@
+	cp base/conf/zz-srcoder.conf $@
 
