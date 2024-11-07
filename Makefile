@@ -17,7 +17,7 @@ DOCKER_EXT_INSTALL = bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl soc
 DOCKER_EXT_CONFIGURE = gd --with-freetype --with-jpeg --with-webp
 DOCKER_EXT_CONFIGURE_INSTALL = gd
 
-DOCKER_CMD=docker
+DOCKER_CMD=podman
 
 all: $(allfiles)
 	@echo Created all files
