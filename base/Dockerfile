@@ -82,7 +82,7 @@ RUN curl -sS https://getcomposer.org/installer --output composer-setup.php \
     && rm composer-setup.php
 
 # Copy config files
-COPY conf/php-fpm.conf /usr/local/etc/
+COPY conf/zz-srcoder.conf /usr/local/etc/php-fpm.d/zz-srcoder.conf
 COPY conf/php.ini /usr/local/etc/php/
 
 # Enable PHP cli
