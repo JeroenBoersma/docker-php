@@ -1,4 +1,4 @@
-versions = php80 php81 php83 php83
+versions = php80 php81 php83 php83 php84
 directories = $(foreach version,$(versions),$(version)/fpm)
 
 dockerimage = srcoder/development-php
