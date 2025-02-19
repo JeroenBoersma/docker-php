@@ -13,6 +13,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libxml2-dev \
         libicu-dev \
         libxslt-dev \
+        libavif-dev \
         wget libcurl4-openssl-dev \
         libmagickwand-dev imagemagick \
         libzip-dev \
@@ -43,7 +44,7 @@ RUN cd /tmp \
     && rm -rf /tmp/imagick
 
 RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-avif \
     && docker-php-ext-install gd
 
 # Install PECL extensions
