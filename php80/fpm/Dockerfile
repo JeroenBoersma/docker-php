@@ -42,7 +42,7 @@ RUN cd /tmp \
     && docker-php-ext-enable imagick \
     && rm -rf /tmp/imagick
 
-RUN docker-php-ext-install bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif \
+RUN docker-php-ext-install bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd
 
