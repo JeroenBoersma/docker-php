@@ -1,7 +1,7 @@
 versions = php80 php81 php83 php83 php84
 directories = $(foreach version,$(versions),$(version)/fpm)
 
-dockerimage = srcoder/development-php
+dockerimage = docker.io/srcoder/development-php
 version = 
 dockertag = $(version)-fpm
 
@@ -13,8 +13,8 @@ allfiles = $(dockerfiles) $(phpfpmfiles) $(phpinifiles)
 
 # PHP MODULES and CONFIGURATIONS PARAMETERS
 PECL_EXTENSIONS = xdebug redis apcu
-DOCKER_EXT_INSTALL = bcmath mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif
-DOCKER_EXT_CONFIGURE = gd --with-freetype --with-jpeg --with-webp
+DOCKER_EXT_INSTALL = bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif
+DOCKER_EXT_CONFIGURE = gd --with-freetype --with-jpeg --with-webp --with-avif
 DOCKER_EXT_CONFIGURE_INSTALL = gd
 
 DOCKER_CMD=podman

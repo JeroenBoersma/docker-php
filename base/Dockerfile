@@ -13,6 +13,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
         libxml2-dev \
         libicu-dev \
         libxslt-dev \
+	libavif-dev \
         wget libcurl4-openssl-dev \
         libmagickwand-dev imagemagick \
         libzip-dev \
