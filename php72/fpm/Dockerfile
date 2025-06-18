@@ -4,7 +4,8 @@ LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 # Install extensions
-RUN install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug
+RUN chmod 0755 /usr/local/bin/install-php-extensions && \
+    install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug
 
 RUN apt-get update --fix-missing && apt-get install -y \
     msmtp \
