@@ -11,9 +11,6 @@ phpinifiles = $(foreach directory,$(directories),$(directory)/conf/php.ini)
 
 allfiles = $(dockerfiles) $(phpfpmfiles) $(phpinifiles)
 
-# PHP MODULES and CONFIGURATIONS PARAMETERS
-PHP_EXTENSION_INSTALL = bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire
-
 DOCKER_CMD=podman
 
 all: $(allfiles)
@@ -47,7 +44,6 @@ php%/fpm/Dockerfile: base/Dockerfile
 	@mkdir -p $(shell dirname $@)
 	cp base/Dockerfile $@
 	sed -e 's/%%PHP_VERSION%%/$(version)/' -i $@
-	sed -e 's/%%PHP_EXTENSION_INSTALL%%/$(PHP_EXTENSION_INSTALL)/' -i $@
 
 php%/fpm/conf/php.ini: base/conf/php.ini
 	@mkdir -p $(shell dirname $@)

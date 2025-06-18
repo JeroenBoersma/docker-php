@@ -3,7 +3,19 @@ LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions %%PHP_EXTENSION_INSTALL%%
+# Install extensions
+RUN install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug
+
+# Install imagick
+RUN cd /tmp \
+    && git clone https://github.com/Imagick/imagick \
+    && cd imagick \
+    && phpize \
+    && ./configure \
+    && make \
+    && make install \
+    && docker-php-ext-enable imagick \
+    && rm -rf /tmp/imagick
 
 # Enable debug extension
 RUN echo "blackfire.agent_socket=tcp://blackfire:8307" > $PHP_INI_DIR/conf.d/blackfire.ini
