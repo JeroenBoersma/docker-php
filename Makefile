@@ -1,4 +1,4 @@
-versions = php80 php81 php83 php83 php84
+versions = php56 php70 php72 php74 php80 php81 php83 php83 php84
 directories = $(foreach version,$(versions),$(version)/fpm)
 
 dockerimage = docker.io/srcoder/development-php
@@ -12,10 +12,7 @@ phpinifiles = $(foreach directory,$(directories),$(directory)/conf/php.ini)
 allfiles = $(dockerfiles) $(phpfpmfiles) $(phpinifiles)
 
 # PHP MODULES and CONFIGURATIONS PARAMETERS
-PECL_EXTENSIONS = xdebug redis apcu
-DOCKER_EXT_INSTALL = bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif
-DOCKER_EXT_CONFIGURE = gd --with-freetype --with-jpeg --with-webp --with-avif
-DOCKER_EXT_CONFIGURE_INSTALL = gd
+PHP_EXTENSION_INSTALL = bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire
 
 DOCKER_CMD=podman
 
@@ -50,13 +47,7 @@ php%/fpm/Dockerfile: base/Dockerfile
 	@mkdir -p $(shell dirname $@)
 	cp base/Dockerfile $@
 	sed -e 's/%%PHP_VERSION%%/$(version)/' -i $@
-	sed -e 's/%%PECL_EXTENSIONS%%/$(PECL_EXTENSIONS)/' -i $@
-	sed -e 's/%%DOCKER_EXT_INSTALL%%/$(DOCKER_EXT_INSTALL)/' -i $@
-	sed -e 's/%%DOCKER_EXT_CONFIGURE%%/$(DOCKER_EXT_CONFIGURE)/' -i $@
-	sed -e 's/%%DOCKER_EXT_CONFIGURE_INSTALL%%/$(DOCKER_EXT_CONFIGURE_INSTALL)/' -i $@
-
-php72/fpm/Dockerfile php73/fpm/Dockerfile:
-	sed -e 's# --with-freetype --with-jpeg --with-webp# --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/#' -i $@
+	sed -e 's/%%PHP_EXTENSION_INSTALL%%/$(PHP_EXTENSION_INSTALL)/' -i $@
 
 php%/fpm/conf/php.ini: base/conf/php.ini
 	@mkdir -p $(shell dirname $@)
