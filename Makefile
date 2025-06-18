@@ -25,6 +25,9 @@ build: all
 	for version in $(versions); do \
 		$(MAKE) build-version version="$${version}"; \
 	done
+	$(MAKE) build-version version=latest dockertag=latest
+	$(MAKE) build-version version=php56 dockertag=php5-fpm
+	$(MAKE) build-version version=php70 dockertag=php7-fpm
 
 .PHONY: images
 images:
