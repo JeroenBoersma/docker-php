@@ -30,7 +30,7 @@ Supported versions + the EOL dates
 - php81-fpm
 - php82-fpm
 - php83-fpm
-- php84-fpm
+- php84-fpm, latest
 
 ## Preinstalled
 `bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug`
