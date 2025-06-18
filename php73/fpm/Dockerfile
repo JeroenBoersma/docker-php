@@ -5,27 +5,7 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 
 # Install extensions
 RUN chmod 0755 /usr/local/bin/install-php-extensions && \
-    install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug
-
-RUN apt-get update --fix-missing && apt-get install -y \
-    msmtp \
-    libmagickwand-dev imagemagick \
-    wget \
-    unzip \
-    ssh-client git \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install imagick
-RUN cd /tmp \
-    && git clone https://github.com/Imagick/imagick \
-    && cd imagick \
-    && phpize \
-    && ./configure \
-    && make \
-    && make install \
-    && docker-php-ext-enable imagick \
-    && rm -rf /tmp/imagick
+    install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug imagick
 
 # Enable debug extension
 RUN echo "blackfire.agent_socket=tcp://blackfire:8307" > $PHP_INI_DIR/conf.d/blackfire.ini
