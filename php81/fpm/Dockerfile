@@ -9,7 +9,7 @@ RUN chmod 0755 /usr/local/bin/install-php-extensions && \
 
 # add internal useful tools
 RUN apt-get update --fix-missing \
-    && apt-get install -y ssh-client git vim wget unzip \
+    && apt-get install -y ssh-client git vim wget unzip msmtp \
     && rm -rf /var/lib/apt/lists/*
 
 
