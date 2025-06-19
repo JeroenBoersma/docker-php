@@ -7,6 +7,12 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 RUN chmod 0755 /usr/local/bin/install-php-extensions && \
     install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug imagick
 
+# add internal useful tools
+RUN apt-get update --fix-missing \
+    && apt-get install -y ssh-client git vim wget unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+
 # Enable debug extension
 RUN echo "blackfire.agent_socket=tcp://blackfire:8307" > $PHP_INI_DIR/conf.d/blackfire.ini
 
