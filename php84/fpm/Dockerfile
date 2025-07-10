@@ -3,15 +3,84 @@ LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-# Install extensions
-RUN chmod 0755 /usr/local/bin/install-php-extensions && \
-    install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug imagick
-
-# add internal useful tools
+# Install system dependencies for building ImageMagick and lib-vips
 RUN apt-get update --fix-missing \
-    && apt-get install -y ssh-client git vim wget unzip msmtp \
+    && apt-get install -y \
+        ssh-client git vim wget unzip msmtp \
+        build-essential pkg-config \
+        libpng-dev libjpeg-dev libwebp-dev libtiff-dev libgif-dev \
+        libfreetype6-dev libfontconfig1-dev \
+        libxml2-dev libxslt1-dev \
+        liblcms2-dev libraw-dev \
+        libheif-dev libde265-dev \
+        libopenjp2-7-dev \
+        libfftw3-dev \
+        libexpat1-dev \
+        libglib2.0-dev \
+        libgsf-1-dev \
+        liborc-0.4-dev \
+        libtool \
+        gobject-introspection \
+        libgirepository1.0-dev \
+        meson \
+        ninja-build \
+        cmake \
     && rm -rf /var/lib/apt/lists/*
 
+# Build and install latest ImageMagick from source
+ARG IMAGEMAGICK_VERSION=7.1.1-39
+RUN cd /tmp \
+    && wget https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGEMAGICK_VERSION}.tar.gz \
+    && tar -xzf ${IMAGEMAGICK_VERSION}.tar.gz \
+    && cd ImageMagick-${IMAGEMAGICK_VERSION} \
+    && ./configure \
+        --with-modules \
+        --with-quantum-depth=16 \
+        --with-heic=yes \
+        --with-webp=yes \
+        --with-openjp2=yes \
+        --with-raw=yes \
+        --with-png=yes \
+        --with-jpeg=yes \
+        --with-tiff=yes \
+        --with-freetype=yes \
+        --with-fontconfig=yes \
+        --with-xml=yes \
+        --with-lcms=yes \
+        --with-fftw=yes \
+        --enable-shared \
+        --disable-static \
+        --without-perl \
+        --without-magick-plus-plus \
+    && make -j$(nproc) \
+    && make install \
+    && ldconfig \
+    && cd / \
+    && rm -rf /tmp/ImageMagick-*
+
+# Build and install latest lib-vips from source
+ARG LIBVIPS_VERSION=8.15.5
+RUN cd /tmp \
+    && wget https://github.com/libvips/libvips/releases/download/v${LIBVIPS_VERSION}/vips-${LIBVIPS_VERSION}.tar.xz \
+    && tar -xf vips-${LIBVIPS_VERSION}.tar.xz \
+    && cd vips-${LIBVIPS_VERSION} \
+    && meson setup build \
+        --buildtype=release \
+        --prefix=/usr/local \
+        -Dintrospection=enabled \
+        -Dmodules=enabled \
+        -Dcplusplus=false \
+        -Ddeprecated=false \
+    && cd build \
+    && ninja \
+    && ninja install \
+    && ldconfig \
+    && cd / \
+    && rm -rf /tmp/vips-*
+
+# Install PHP extensions (including imagick and vips)
+RUN chmod 0755 /usr/local/bin/install-php-extensions && \
+    install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug imagick vips
 
 # Enable debug extension
 RUN echo "blackfire.agent_socket=tcp://blackfire:8307" > $PHP_INI_DIR/conf.d/blackfire.ini
