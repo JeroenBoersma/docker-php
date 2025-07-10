@@ -25,6 +25,9 @@ RUN apt-get update --fix-missing \
         meson \
         ninja-build \
         cmake \
+        libaom-dev \
+        libdav1d-dev \
+        libavif-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Build and install latest ImageMagick from source
@@ -48,6 +51,7 @@ RUN cd /tmp \
         --with-xml=yes \
         --with-lcms=yes \
         --with-fftw=yes \
+        --with-avif=yes \
         --enable-shared \
         --disable-static \
         --without-perl \
@@ -81,6 +85,7 @@ RUN cd /tmp \
 # Install PHP extensions (including imagick and vips)
 RUN chmod 0755 /usr/local/bin/install-php-extensions && \
     install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug imagick vips
+
 # add internal useful tools
 RUN apt-get update --fix-missing \
     && apt-get install -y ssh-client git vim wget unzip msmtp \
