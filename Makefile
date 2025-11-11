@@ -22,12 +22,16 @@ clean:
 
 .PHONY: build
 build: all
+	$(MAKE) with CMD=build-version
+
+.PHONY: with
+with:
 	for version in $(versions); do \
-		$(MAKE) build-version version="$${version}"; \
+		$(MAKE) $(CMD) version="$${version}"; \
 	done
-	$(MAKE) build-version version=latest dockertag=latest
-	$(MAKE) build-version version=php56 dockertag=php5-fpm
-	$(MAKE) build-version version=php70 dockertag=php7-fpm
+	$(MAKE) $(CMD) version=latest dockertag=latest
+	$(MAKE) $(CMD) version=php56 dockertag=php5-fpm
+	$(MAKE) $(CMD) version=php70 dockertag=php7-fpm
 
 .PHONY: images
 images:
@@ -41,7 +45,15 @@ endif
 	cd $(version)/fpm \
 		&& $(DOCKER_CMD) build --tag "$(dockerimage):$(dockertag)" .
 
-php%: version = $(shell echo $@ | sed -e 's#/.*##' -e 's/php\([0-9]\)\([0-9]\)/\1.\2-fpm/')
+.PHONY: push
+push:
+	$(MAKE) with CMD=push-version
+
+.PHONY: push-version
+push-version:
+	$(DOCKER_CMD) push $(dockerimage):$(dockertag) docker://$(dockerimage):$(dockertag)
+
+php%: version = $(shell echo $@ | sed -e 's#/.*##' -e 's/php\([0-9]\)\([0-9]\)\(-rc\)*/\1.\2\3-fpm/')
 
 php%/fpm/Dockerfile: base/Dockerfile
 	@mkdir -p $(shell dirname $@)
