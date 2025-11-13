@@ -5,7 +5,20 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 
 # Install extensions
 RUN chmod 0755 /usr/local/bin/install-php-extensions && \
-    install-php-extensions bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug imagick
+    install-php-extensions \
+    	apcu \
+	bcmath blackfire \
+	exif \
+	ftp \
+	gd \
+	imagick intl \
+	mysqli \
+	opcache \
+	pcntl pdo_mysql \
+	redis \
+	soap sockets \
+	xdebug xsl \
+	zip
 
 # add internal useful tools
 RUN apt-get update --fix-missing \
