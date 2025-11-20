@@ -1,4 +1,4 @@
-FROM docker.io/library/php:8.5-rc-fpm
+FROM docker.io/library/php:8.5-fpm
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -7,17 +7,17 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 RUN chmod 0755 /usr/local/bin/install-php-extensions && \
     install-php-extensions \
     	apcu \
-	bcmath \
+	bcmath blackfire \
 	exif \
 	ftp \
 	gd \
-	intl \
+	imagick intl \
 	mysqli \
 	opcache \
 	pcntl pdo_mysql \
-	redis-6.3.0RC1 \
+	redis \
 	soap sockets \
-	xsl \
+	xdebug xsl \
 	zip
 
 # add internal useful tools
