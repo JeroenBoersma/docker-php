@@ -7,17 +7,20 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 RUN chmod 0755 /usr/local/bin/install-php-extensions && \
     install-php-extensions \
     	apcu \
-	bcmath blackfire \
+	bcmath \
+	# blackfire \
 	exif \
 	ftp \
 	gd \
-	imagick intl \
+	#imagick \
+	intl \
 	mysqli \
 	opcache \
 	pcntl pdo_mysql \
 	redis \
 	soap sockets \
-	xdebug xsl \
+	# xdebug \
+	xsl \
 	zip
 
 # add internal useful tools
