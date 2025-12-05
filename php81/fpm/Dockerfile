@@ -22,7 +22,7 @@ RUN chmod 0755 /usr/local/bin/install-php-extensions && \
 
 # add internal useful tools
 RUN apt-get update --fix-missing \
-    && apt-get install -y ssh-client git vim wget unzip msmtp \
+    && apt-get install -y ssh-client git vim wget unzip msmtp libheif-plugin-aomenc libheif-plugin-svtenc \
     && rm -rf /var/lib/apt/lists/*
 
 
