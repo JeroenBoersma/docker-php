@@ -17,6 +17,7 @@ RUN chmod 0755 /usr/local/bin/install-php-extensions && \
 	pcntl pdo_mysql \
 	redis \
 	soap sockets \
+	vips \
 	xdebug xsl \
 	zip
 
