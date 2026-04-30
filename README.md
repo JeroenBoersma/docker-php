@@ -35,7 +35,7 @@ Supported versions + the EOL dates
 - php85-fpm, latest
 
 ## Preinstalled
-`bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug`
+`bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug vips`
 
 And
 - Imagemagick

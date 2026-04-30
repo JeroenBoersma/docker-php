@@ -60,6 +60,13 @@ php%/fpm/Dockerfile: base/Dockerfile
 	cp base/Dockerfile $@
 	sed -e 's/%%PHP_VERSION%%/$(version)/' -i $@
 
+# vips is not supported on PHP 5.6 by docker-php-extension-installer
+php56/fpm/Dockerfile: base/Dockerfile
+	@mkdir -p $(shell dirname $@)
+	cp base/Dockerfile $@
+	sed -e 's/%%PHP_VERSION%%/$(version)/' -i $@
+	sed -e '/^\tvips \\$$/d' -i $@
+
 php%/fpm/conf/php.ini: base/conf/php.ini
 	@mkdir -p $(shell dirname $@)
 	cp base/conf/php.ini $@
