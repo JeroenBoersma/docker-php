@@ -25,28 +25,21 @@ RUN apt-get update --fix-missing \
     && apt-get install -y ssh-client git vim wget unzip msmtp \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Enable debug extension
 RUN echo "blackfire.agent_socket=tcp://blackfire:8307" > $PHP_INI_DIR/conf.d/blackfire.ini
 
-# Install Magerun
-RUN curl https://files.magerun.net/n98-magerun.phar > /usr/local/bin/n98-magerun \
-    && chmod +x /usr/local/bin/n98-magerun \
-    && ln -s /usr/local/bin/n98-magerun /usr/local/bin/magerun
+# Install Magerun version 1 & 2
+ADD --chmod=0755 https://files.magerun.net/n98-magerun.phar /usr/local/bin/n98-magerun
+ADD --chmod=0755 https://files.magerun.net/n98-magerun2.phar /usr/local/bin/n98-magerun2
 
-# Install Magerun2
-RUN curl https://files.magerun.net/n98-magerun2.phar > /usr/local/bin/n98-magerun2 \
-    && chmod +x /usr/local/bin/n98-magerun2 \
-    && ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
+RUN ln -s /usr/local/bin/n98-magerun /usr/local/bin/magerun \
+	&& ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer --output composer-setup.php \
-    && for version in 1 2; \
-        do php composer-setup.php "--$version" --install-dir=/usr/local/bin --filename="composer$version"; \
-        chmod ugo+rx /usr/local/bin/"composer$version"; \
-    done \
-    && ln -s /usr/local/bin/composer2 /usr/local/bin/composer \
-    && rm composer-setup.php
+COPY --from=docker.io/composer/composer:1-bin /composer /usr/local/bin/composer1
+COPY --from=docker.io/composer/composer:2-bin /composer /usr/local/bin/composer2
+
+RUN ln -s /usr/local/bin/composer2 /usr/local/bin/composer
 
 # Copy config files
 COPY conf/zz-srcoder.conf /usr/local/etc/php-fpm.d/zz-srcoder.conf
