@@ -57,7 +57,7 @@ push-version:
 # Pull dependend images
 .PHONY: pull-from-images
 pull-from-images:
-	find php* -name Dockerfile | xargs grep -hi from | sed -e 's#FROM ##' -e 's#.*--from=##' -e 's# .*##' | sort | uniq | xargs $(DOCKER_CMD) pull
+	find php* -name Dockerfile | xargs grep -hi from | grep / | sed -e 's#FROM ##' -e 's#.*--from=##' -e 's# .*##' | sort | uniq | xargs $(DOCKER_CMD) pull
 
 # Files
 
