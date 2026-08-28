@@ -1,7 +1,18 @@
+# Download all remote files once, better caching
+FROM docker.io/library/alpine as downloads
+
+# Download PHP Extension Installer
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /
+
+# Install Magerun version 1 & 2
+ADD --chmod=0755 https://files.magerun.net/n98-magerun.phar /n98-magerun
+ADD --chmod=0755 https://files.magerun.net/n98-magerun2.phar /n98-magerun2
+
+## Build the image
 FROM docker.io/library/php:%%PHP_VERSION%%
 LABEL maintainer="Jeroen Boersma <jeroen@srcode.nl>"
 
-ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+COPY --from=downloads /install-php-extensions /usr/local/bin/
 
 # Install extensions
 RUN chmod 0755 /usr/local/bin/install-php-extensions && \
@@ -29,9 +40,8 @@ RUN apt-get update --fix-missing \
 # Enable debug extension
 RUN echo "blackfire.agent_socket=tcp://blackfire:8307" > $PHP_INI_DIR/conf.d/blackfire.ini
 
-# Install Magerun version 1 & 2
-ADD --chmod=0755 https://files.magerun.net/n98-magerun.phar /usr/local/bin/n98-magerun
-ADD --chmod=0755 https://files.magerun.net/n98-magerun2.phar /usr/local/bin/n98-magerun2
+COPY --from=downloads /n98-magerun /usr/local/bin/
+COPY --from=downloads /n98-magerun2 /usr/local/bin/
 
 RUN ln -s /usr/local/bin/n98-magerun /usr/local/bin/magerun \
 	&& ln -s /usr/local/bin/n98-magerun2 /usr/local/bin/magerun2
