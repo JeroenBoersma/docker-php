@@ -45,6 +45,7 @@ endif
 	cd $(version)/fpm \
 		&& $(DOCKER_CMD) build --tag "$(dockerimage):$(dockertag)" .
 
+# Push build images upstream
 .PHONY: push
 push:
 	$(MAKE) with CMD=push-version
@@ -52,6 +53,13 @@ push:
 .PHONY: push-version
 push-version:
 	$(DOCKER_CMD) push $(dockerimage):$(dockertag) docker://$(dockerimage):$(dockertag)
+
+# Pull dependend images
+.PHONY: pull-from-images
+pull-from-images:
+	find php* -name Dockerfile | xargs grep -hi from | sed -e 's#FROM ##' -e 's#.*--from=##' -e 's# .*##' | sort | uniq | xargs $(DOCKER_CMD) pull
+
+# Files
 
 php%: version = $(shell echo $@ | sed -e 's#/.*##' -e 's/php\([0-9]\)\([0-9]\)\(-rc\)*/\1.\2\3-fpm/')
 
