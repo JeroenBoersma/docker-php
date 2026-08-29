@@ -70,10 +70,10 @@ push:
 # Pull dependend images
 .PHONY: pull
 pull:
-	$(MAKE) pull-image IMAGE=docker.io/library/alpine:latest
-	$(MAKE) pull-image IMAGE=docker.io/composer/composer:1-bin
-	$(MAKE) pull-image IMAGE=docker.io/composer/composer:2-bin
-	$(MAKE) pull-image IMAGE=docker.io/composer/composer:lts-bin
+	$(MAKE) pull-image IMAGE=docker.io/library/alpine TAG=latest
+	$(MAKE) pull-image IMAGE=docker.io/composer/composer TAG=1-bin
+	$(MAKE) pull-image IMAGE=docker.io/composer/composer TAG=2-bin
+	$(MAKE) pull-image IMAGE=docker.io/composer/composer TAG=lts-bin
 	$(MAKE) with CMD=pull-image
 
 .PHONY: images
@@ -115,6 +115,7 @@ pull-image:
 
 # Files
 
+export GITIGNORE_CONTENTS
 .gitignore: Makefile
 	echo "$${GITIGNORE_CONTENTS}" > $@
 
