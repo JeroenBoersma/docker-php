@@ -175,12 +175,14 @@ RUN install-php-extensions \
 
 # add internal useful tools
 ARG EXTRA_APT_PACKAGES=git vim wget unzip curl
-RUN apt-get update --fix-missing \
-    && apt-get install -y $${EXTRA_APT_PACKAGES} \
-    && rm -rf /var/lib/apt/lists/*
+RUN (type apt-get && apt-get update --fix-missing \
+    	&& apt-get install -y $${EXTRA_APT_PACKAGES} \
+    	&& rm -rf /var/lib/apt/lists/* ) || \
+    (type apk && apk add --no-cache $${EXTRA_APT_PACKAGES} \
+    && apk cache clean )
 
 # Enable blackfire debug extension
-RUN echo $${PHP_EXTENSIONS} | grep blackfire && echo "blackfire.agent_socket=tcp://blackfire:8307" > $$PHP_INI_DIR/conf.d/blackfire.ini
+RUN echo $${PHP_EXTENSIONS} | grep blackfire && (echo "blackfire.agent_socket=tcp://blackfire:8307" > $$PHP_INI_DIR/conf.d/blackfire.ini) || true
 
 COPY --from=downloads /n98-magerun1 /usr/local/bin/
 COPY --from=downloads /n98-magerun2 /usr/local/bin/
@@ -212,8 +214,9 @@ ARG USER=$(FPM_USER)
 ARG HOME=$(FPM_HOME)
 ARG SHELL=$(FPM_SHELL)
 
-RUN groupadd -g $${UID} $${USER} && \
-    useradd -g $${UID} -u $${GID} -d $${HOME} -s $${SHELL} $${USER}
+RUN addgroup --gid $${GID} $${USER} && \
+    adduser -g $${GID} -u $${UID} -h $${HOME} -s $${SHELL} $${USER} || \
+    true
 
 WORKDIR $${HOME}
 
