@@ -125,10 +125,12 @@ Dockerfile: Makefile conf/zz-srcoder.conf conf/php.ini
 
 export FPM_ZZ_SRCODER_CONF_CONTENTS
 conf/zz-srcoder.conf: Makefile
+	mkdir -p conf
 	echo "$${FPM_ZZ_SRCODER_CONF_CONTENTS}"	> $@
 
 export FPM_PHP_INI_CONTENTS
 conf/php.ini: Makefile
+	mkdir -p conf
 	echo "$${FPM_PHP_INI_CONTENTS}" > $@
 
 # Contents
