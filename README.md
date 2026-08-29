@@ -1,8 +1,6 @@
 # docker-php
 
-Docker PHP images used by docker development.
-
-See https://github.com/JeroenBoersma/docker-compose-development for usage.
+Docker PHP images used for development.
 
 ## Versions
 Supported versions + the EOL dates
@@ -35,18 +33,67 @@ Supported versions + the EOL dates
 - php85-fpm, latest
 
 ## Preinstalled
-`bcmath ftp mysqli pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug vips`
+`bcmath ftp mysqli mbstring pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug vips`
 
 And
 - Imagemagick
 - Composer 1/2
 - Magerun 1/2
 
+## Building
+If you want to build the images yourself locally, go ahead
+
+```shell
+# docker
+make pull build CONTAINER_COMMAND=docker
+# podman
+make pull build CONTAINER_COMMAND=podman
+
+```
+
+## Customization
+If you want to use a different base image, change tags, add more packages or extensions.
+
+- `IMAGE` & `TAG`: Base image to use to build
+- `OUTPUT_IMAGE` & `OUTPUT_TAG`: Output tag
+- `PHP_EXTENSIONS`: List of basic extensions to install
+- `EXTRA_APT_PACKAGES`: If you want to install some extra packages
+- `COMPOSER_VERSION(1|2)`: Set a tag for the composer base images 
+
+```shell
+make build-version \
+    IMAGE=docker.io/library/php \
+    TAG=cli \
+    OUTPUT_IMAGE=development \
+    OUTPUT_TAG=latest \
+    PHP_EXTENSIONS='apcu \
+	    bcmath \
+	    exif \
+	    mbstring \
+	    opcache \
+	    pdo_mysql \
+	    sockets \
+	    zip' \
+    EXTRA_APT_PACKAGES='git vim curl unzip' \
+    COMPOSER_VERSION2=lts-bin
+
+```
+
 ## User
 
 Runs as user `1000 - app`.
 Use `usermod` and `groupmod` to change the userid.
 
+- `FPM_UID`
+- `FPM_GID`
+- `FPM_SHELL`
+- `FPM_USER`
+- `FPM_HOME`
+
+```shell
+make -b Dockerfile FPM_*=''
+make build ... # see above
+```
 
 ## Authors
 
