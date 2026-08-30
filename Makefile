@@ -55,9 +55,9 @@ clean:
 .PHONY: build
 build:
 	$(MAKE) with CMD=build-version
-	$(CONTAINER_COMMAND) tag "$(BUILD_IMAGE):php56-fpm" "$(BUILD_IMAGE):php5-fpm" 
-	$(CONTAINER_COMMAND) tag "$(BUILD_IMAGE):php70-fpm" "$(BUILD_IMAGE):php7-fpm" 
-	$(CONTAINER_COMMAND) tag "$(BUILD_IMAGE):php85-fpm" "$(BUILD_IMAGE):latest" 
+	$(CONTAINER_COMMAND) tag "$(OUTPUT_IMAGE):php56-fpm" "$(OUTPUT_IMAGE):php5-fpm" 
+	$(CONTAINER_COMMAND) tag "$(OUTPUT_IMAGE):php70-fpm" "$(OUTPUT_IMAGE):php7-fpm" 
+	$(CONTAINER_COMMAND) tag "$(OUTPUT_IMAGE):php85-fpm" "$(OUTPUT_IMAGE):latest" 
 
 # Push build images upstream
 .PHONY: push
