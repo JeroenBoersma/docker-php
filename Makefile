@@ -51,6 +51,10 @@ all: .gitignore pull build
 .PHONY: clean
 clean:
 
+.PHONY: versions
+versions:
+	for a in $(VERSIONS); do echo $$a; done
+
 # Build images locally
 .PHONY: build
 build:
