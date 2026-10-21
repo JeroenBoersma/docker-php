@@ -1,4 +1,4 @@
-VERSIONS = php56 php70 php71 php72 php73 php74 php80 php81 php82 php83 php84 php85
+VERSIONS = php56 php70 php71 php72 php73 php74 php80 php81 php82 php83 php84 php85 php86
 
 OUTPUT_IMAGE = docker.io/srcoder/development-php
 OUTPUT_TAG = $(VERSION)-fpm
@@ -41,6 +41,15 @@ ifeq ($(VERSION),php56)
 	PHP_EXTENSIONS := $(PHP_EXTENSIONS:vips=)
 endif
 
+ifeq ($(VERSION),php86)
+	# Still unsupported in this version
+	PHP_EXTENSIONS := $(PHP_EXTENSIONS:apcu=)
+	PHP_EXTENSIONS := $(PHP_EXTENSIONS:imagick=)
+	PHP_EXTENSIONS := $(PHP_EXTENSIONS:redis=)
+	PHP_EXTENSIONS := $(PHP_EXTENSIONS:vips=)
+	PHP_EXTENSIONS := $(PHP_EXTENSIONS:xdebug=)
+endif
+
 LTS_VERSIONS = 56 70 71
 ifneq ($(foreach r,$(LTS_VERSIONS),$(if $(VERSION:php$(r)=),$(r),)),$(LTS_VERSIONS))
 	COMPOSER_VERSION2 := lts-bin
@@ -61,7 +70,7 @@ build:
 	$(MAKE) with CMD=build-version
 	$(CONTAINER_COMMAND) tag "$(OUTPUT_IMAGE):php56-fpm" "$(OUTPUT_IMAGE):php5-fpm" 
 	$(CONTAINER_COMMAND) tag "$(OUTPUT_IMAGE):php70-fpm" "$(OUTPUT_IMAGE):php7-fpm" 
-	$(CONTAINER_COMMAND) tag "$(OUTPUT_IMAGE):php85-fpm" "$(OUTPUT_IMAGE):latest" 
+	$(CONTAINER_COMMAND) tag "$(OUTPUT_IMAGE):php86-fpm" "$(OUTPUT_IMAGE):latest" 
 
 # Push build images upstream
 .PHONY: push
@@ -90,6 +99,9 @@ php-versions:
 
 .PHONY: php-version
 php-version:
+	echo "$(IMAGE):$(TAG)"
+	$(CONTAINER_COMMAND) run --rm --network=none --entrypoint=/usr/local/bin/php "$(IMAGE):$(TAG)" --version
+	echo "$(OUTPUT_IMAGE):$(OUTPUT_TAG)"
 	$(CONTAINER_COMMAND) run --rm --network=none --entrypoint=/usr/local/bin/php "$(OUTPUT_IMAGE):$(OUTPUT_TAG)" --version
 
 # Run for each version in VERSIONS

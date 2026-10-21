@@ -17,6 +17,7 @@ Supported versions + the EOL dates
 - 8.3
 - 8.4
 - 8.5
+- 8.6
 
 ## Tags
 - php56-fpm, php5-fpm
@@ -30,7 +31,8 @@ Supported versions + the EOL dates
 - php82-fpm
 - php83-fpm
 - php84-fpm
-- php85-fpm, latest
+- php85-fpm
+- php86-fpm, latest
 
 ## Preinstalled
 `bcmath ftp mysqli mbstring pdo_mysql soap zip intl opcache xsl pcntl sockets exif redis apcu gd blackfire xdebug vips`
