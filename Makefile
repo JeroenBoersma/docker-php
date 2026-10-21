@@ -1,4 +1,4 @@
-VERSIONS = php56 php70 php71 php72 php73 php74 php80 php81 php82 php83 php83 php84 php85
+VERSIONS = php56 php70 php71 php72 php73 php74 php80 php81 php82 php83 php84 php85
 
 OUTPUT_IMAGE = docker.io/srcoder/development-php
 OUTPUT_TAG = $(VERSION)-fpm
@@ -83,6 +83,14 @@ pull:
 .PHONY: images
 images:
 	$(CONTAINER_COMMAND) images | grep $(OUTPUT_IMAGE)
+
+.PHONY: php-versions
+php-versions:
+	$(MAKE) with CMD=php-version
+
+.PHONY: php-version
+php-version:
+	$(CONTAINER_COMMAND) run --rm --network=none --entrypoint=/usr/local/bin/php "$(OUTPUT_IMAGE):$(OUTPUT_TAG)" --version
 
 # Run for each version in VERSIONS
 .PHONY: with
