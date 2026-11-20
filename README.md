@@ -13,7 +13,7 @@ Supported versions + the EOL dates
 - 7.4 (EOL 28 Nov 2022)
 - 8.0 (EOL 26 Nov 2023)
 - 8.1 (EOL 31 Dec 2025)
-- 8.2
+- 8.2 (EOL 31 Dec 2026)
 - 8.3
 - 8.4
 - 8.5
